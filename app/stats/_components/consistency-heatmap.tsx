@@ -86,45 +86,50 @@ export function ConsistencyHeatmap({
   consistencyByDay: ConsistencyByDay
 }) {
   const months = getHeatmapMonths()
+  const allWeeks = months.flatMap((m) => m.weeks)
+  const totalWeeks = allWeeks.length
 
   return (
-    <div className="flex gap-1 overflow-x-auto rounded-xl border border-border p-5">
+    <div
+      className="grid rounded-xl border border-border p-5"
+      style={{
+        gridTemplateColumns: `repeat(${totalWeeks}, 1fr)`,
+        gap: '4px',
+      }}
+    >
       {months.map((month) => (
-        <div key={month.label} className="flex flex-col gap-1.5">
-          <span className="font-heading text-xs leading-[1.4] text-muted-foreground">
-            {month.label}
-          </span>
-          <div className="flex gap-1">
-            {month.weeks.map((week) => (
-              <div
-                key={week[0].format('YYYY-MM-DD')}
-                className="flex flex-col gap-1"
-              >
-                {week.map((day) => {
-                  const dateStr = day.format('YYYY-MM-DD')
-                  const dayData = consistencyByDay[dateStr]
-
-                  return (
-                    <div
-                      key={dateStr}
-                      className={cn(
-                        'size-5 rounded-md',
-                        dayData?.workoutDayCompleted && 'bg-primary',
-                        dayData?.workoutDayStarted &&
-                          !dayData?.workoutDayCompleted &&
-                          'bg-primary/20',
-                        !dayData?.workoutDayStarted &&
-                          !dayData?.workoutDayCompleted &&
-                          'border border-border',
-                      )}
-                    />
-                  )
-                })}
-              </div>
-            ))}
-          </div>
-        </div>
+        <span
+          key={month.label}
+          className="mb-0.5 font-heading text-xs leading-[1.4] text-muted-foreground"
+          style={{ gridColumn: `span ${month.weeks.length}` }}
+        >
+          {month.label}
+        </span>
       ))}
+
+      {Array.from({ length: 7 }, (_, dayIdx) =>
+        allWeeks.map((week) => {
+          const day = week[dayIdx]
+          const dateStr = day.format('YYYY-MM-DD')
+          const dayData = consistencyByDay[dateStr]
+
+          return (
+            <div
+              key={dateStr}
+              className={cn(
+                'aspect-square rounded-md',
+                dayData?.workoutDayCompleted && 'bg-primary',
+                dayData?.workoutDayStarted &&
+                  !dayData?.workoutDayCompleted &&
+                  'bg-primary/20',
+                !dayData?.workoutDayStarted &&
+                  !dayData?.workoutDayCompleted &&
+                  'border border-border',
+              )}
+            />
+          )
+        }),
+      )}
     </div>
   )
 }
