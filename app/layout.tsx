@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Anton, Geist, Geist_Mono, Inter_Tight } from 'next/font/google'
 import './globals.css'
 import { NuqsAdapter } from 'nuqs/adapters/next'
+import { ChatPanel } from './_components/chat-panel'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -39,7 +40,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${interTight.variable} ${anton.variable} antialiased`}
       >
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <NuqsAdapter>
+          {children}
+          <ChatPanel />
+        </NuqsAdapter>
       </body>
     </html>
   )
