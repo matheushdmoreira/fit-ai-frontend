@@ -1,4 +1,3 @@
-import { CircleHelp, Zap } from 'lucide-react'
 import { headers } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { BottomNav } from '@/app/_components/bottom-nav'
@@ -8,9 +7,9 @@ import {
   getWorkoutDay,
 } from '@/app/_lib/api/fetch-generated'
 import { authClient } from '@/app/_lib/auth-client'
-import { Button } from '@/components/ui/button'
 import { BackButton } from './_components/back-button'
 import { CompleteWorkoutButton } from './_components/complete-workout-button'
+import { ExerciseCard } from './_components/exercise-card'
 import { StartWorkoutButton } from './_components/start-workout-button'
 
 type PageParams = {
@@ -88,38 +87,7 @@ export default async function WorkoutDayPage({
 
         <div className="flex flex-col gap-3">
           {sortedExercises.map((exercise) => (
-            <div
-              key={exercise.id}
-              className="flex flex-col justify-center gap-3 rounded-xl border border-border p-5"
-            >
-              <div className="flex items-center justify-between">
-                <span className="font-heading text-base leading-[1.4] font-semibold text-foreground">
-                  {exercise.name}
-                </span>
-
-                <Button
-                  variant="ghost"
-                  size="icon-xs"
-                  className="text-muted-foreground"
-                >
-                  <CircleHelp className="size-5" />
-                </Button>
-              </div>
-              <div className="flex gap-1.5">
-                <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 font-heading text-xs font-semibold uppercase text-muted-foreground">
-                  {exercise.sets} séries
-                </span>
-
-                <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 font-heading text-xs font-semibold uppercase text-muted-foreground">
-                  {exercise.reps} reps
-                </span>
-
-                <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 font-heading text-xs font-semibold uppercase text-muted-foreground">
-                  <Zap className="size-3.5" />
-                  {exercise.restTimeInSeconds}s
-                </span>
-              </div>
-            </div>
+            <ExerciseCard key={exercise.id} exercise={exercise} />
           ))}
         </div>
 
