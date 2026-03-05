@@ -28,8 +28,12 @@ export default async function Home() {
     redirect('/auth')
   }
 
-  const { todayWorkoutDay, workoutStreak, consistencyByDay } =
-    response.data as GetHomeData200
+  const {
+    activeWorkoutPlanId,
+    todayWorkoutDay,
+    workoutStreak,
+    consistencyByDay,
+  } = response.data as GetHomeData200
 
   const firstName = session.data.user.name?.split(' ')[0] ?? ''
 
@@ -48,8 +52,8 @@ export default async function Home() {
 
       <BottomNav
         calendarHref={
-          todayWorkoutDay
-            ? `/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`
+          response.status === 200 && activeWorkoutPlanId
+            ? `/workout-plans/${activeWorkoutPlanId}`
             : undefined
         }
       />
