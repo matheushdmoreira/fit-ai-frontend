@@ -27,7 +27,9 @@ export function TodayWorkoutSection({
         </span>
       </div>
 
-      <Link href="#">
+      <Link
+        href={`/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`}
+      >
         <TrainingDayCard
           name={todayWorkoutDay.name}
           weekDay={todayWorkoutDay.weekDay}

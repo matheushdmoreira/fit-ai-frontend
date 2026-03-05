@@ -46,7 +46,13 @@ export default async function Home() {
         <TodayWorkoutSection todayWorkoutDay={todayWorkoutDay} />
       )}
 
-      <BottomNav />
+      <BottomNav
+        calendarHref={
+          todayWorkoutDay
+            ? `/workout-plans/${todayWorkoutDay.workoutPlanId}/days/${todayWorkoutDay.id}`
+            : undefined
+        }
+      />
     </div>
   )
 }
