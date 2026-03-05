@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { BottomNav } from '@/app/_components/bottom-nav'
 import { type GetStats200, getStats } from '@/app/_lib/api/fetch-generated'
 import { authClient } from '@/app/_lib/auth-client'
+import { needsOnboarding } from '@/app/_lib/check-onboarding'
 import { ConsistencyHeatmap } from '@/app/stats/_components/consistency-heatmap'
 import { StatCards } from '@/app/stats/_components/stat-cards'
 import { StreakBanner } from '@/app/stats/_components/streak-banner'
@@ -17,6 +18,10 @@ export default async function StatsPage() {
 
   if (!session.data) {
     redirect('/auth')
+  }
+
+  if (await needsOnboarding()) {
+    redirect('/onboarding')
   }
 
   const today = dayjs()

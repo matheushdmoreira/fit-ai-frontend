@@ -11,6 +11,7 @@ import {
   getWorkoutPlan,
 } from '@/app/_lib/api/fetch-generated'
 import { authClient } from '@/app/_lib/auth-client'
+import { needsOnboarding } from '@/app/_lib/check-onboarding'
 
 const WEEK_DAY_LABEL: Record<string, string> = {
   MONDAY: 'SEGUNDA',
@@ -55,6 +56,10 @@ export default async function WorkoutPlanPage({
 
   if (!session.data?.user) {
     redirect('/auth')
+  }
+
+  if (await needsOnboarding()) {
+    redirect('/onboarding')
   }
 
   const { id: workoutPlanId } = await params

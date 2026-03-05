@@ -7,6 +7,7 @@ import {
   getUserTrainData,
 } from '@/app/_lib/api/fetch-generated'
 import { authClient } from '@/app/_lib/auth-client'
+import { needsOnboarding } from '@/app/_lib/check-onboarding'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { LogoutButton } from './_components/logout-button'
 
@@ -45,6 +46,10 @@ export default async function ProfilePage() {
     redirect('/auth')
   }
 
+  if (await needsOnboarding()) {
+    redirect('/onboarding')
+  }
+
   const response = await getUserTrainData()
 
   const trainData =
@@ -79,7 +84,9 @@ export default async function ProfilePage() {
           <div className="flex items-center gap-3">
             <Avatar className="size-[52px]">
               <AvatarImage src={userImage} alt={userName} />
-              <AvatarFallback className="text-base">{userInitials}</AvatarFallback>
+              <AvatarFallback className="text-base">
+                {userInitials}
+              </AvatarFallback>
             </Avatar>
             <div className="flex flex-col gap-1.5">
               <p className="font-heading text-lg font-semibold leading-[1.05] text-foreground">

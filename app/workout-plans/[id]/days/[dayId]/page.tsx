@@ -7,6 +7,7 @@ import {
   getWorkoutDay,
 } from '@/app/_lib/api/fetch-generated'
 import { authClient } from '@/app/_lib/auth-client'
+import { needsOnboarding } from '@/app/_lib/check-onboarding'
 import { BackButton } from './_components/back-button'
 import { CompleteWorkoutButton } from './_components/complete-workout-button'
 import { ExerciseCard } from './_components/exercise-card'
@@ -30,6 +31,10 @@ export default async function WorkoutDayPage({
 
   if (!session.data?.user) {
     redirect('/auth')
+  }
+
+  if (await needsOnboarding()) {
+    redirect('/onboarding')
   }
 
   const { id: workoutPlanId, dayId: workoutDayId } = await params

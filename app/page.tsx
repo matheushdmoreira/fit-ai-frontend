@@ -10,6 +10,7 @@ import {
   getHomeData,
 } from '@/app/_lib/api/fetch-generated'
 import { authClient } from '@/app/_lib/auth-client'
+import { needsOnboarding } from '@/app/_lib/check-onboarding'
 
 export default async function Home() {
   const session = await authClient.getSession({
@@ -26,6 +27,10 @@ export default async function Home() {
 
   if (response.status !== 200) {
     redirect('/auth')
+  }
+
+  if (await needsOnboarding()) {
+    redirect('/onboarding')
   }
 
   const { todayWorkoutDay, workoutStreak, consistencyByDay } =
