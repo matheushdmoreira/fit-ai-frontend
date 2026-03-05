@@ -124,7 +124,7 @@ export default async function WorkoutPlanPage({
         )}
       </section>
 
-      <BottomNav calendarHref={`/workout-plans/${workoutPlanId}`} />
+      <BottomNav activePage="calendar" />
     </div>
   )
 }

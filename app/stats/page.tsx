@@ -63,7 +63,7 @@ export default async function StatsPage() {
         />
       </section>
 
-      <BottomNav />
+      <BottomNav activePage="stats" />
     </div>
   )
 }
