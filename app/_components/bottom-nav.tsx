@@ -29,7 +29,7 @@ export function BottomNav({ calendarHref }: BottomNavProps) {
     { icon: House, href: '/', label: 'Início' },
     { icon: Calendar, href: calendarHref ?? '#', label: 'Agenda' },
     { icon: Sparkles, href: '#', label: 'AI', isCenter: true },
-    { icon: ChartNoAxesColumn, href: '#', label: 'Estatísticas' },
+    { icon: ChartNoAxesColumn, href: '/stats', label: 'Estatísticas' },
     { icon: UserRound, href: '#', label: 'Perfil' },
   ]
 
