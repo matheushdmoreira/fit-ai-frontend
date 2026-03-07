@@ -10,7 +10,7 @@ export default async function OnboardingPage() {
     },
   })
 
-  if (!session.data) {
+  if (!session.data?.user) {
     redirect('/auth')
   }
 
