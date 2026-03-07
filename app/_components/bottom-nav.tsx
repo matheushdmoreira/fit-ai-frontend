@@ -1,6 +1,7 @@
 import dayjs from 'dayjs'
 import { Calendar, ChartNoAxesColumn, House, UserRound } from 'lucide-react'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { cn } from '@/lib/utils'
 import { getHomeData } from '../_lib/api/fetch-generated'
 import { ChatOpenButton } from './chat-open-button'
@@ -51,7 +52,9 @@ export async function BottomNav({ activePage = 'home' }: BottomNavProps) {
           />
         </button>
       )}
-      <ChatOpenButton />
+      <Suspense fallback={null}>
+        <ChatOpenButton />
+      </Suspense>
       <Link href="/stats" className="p-3">
         <ChartNoAxesColumn
           className={cn(

@@ -1,4 +1,5 @@
 import { Zap } from 'lucide-react'
+import { Suspense } from 'react'
 import type { GetWorkoutDay200ExercisesItem } from '@/app/_lib/api/fetch-generated'
 import { ExerciseHelpButton } from './exercise-help-button'
 
@@ -14,7 +15,9 @@ export function ExerciseCard({ exercise }: ExerciseCardProps) {
           {exercise.name}
         </span>
 
-        <ExerciseHelpButton exerciseName={exercise.name} />
+        <Suspense fallback={null}>
+          <ExerciseHelpButton exerciseName={exercise.name} />
+        </Suspense>
       </div>
       <div className="flex gap-1.5">
         <span className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 font-heading text-xs font-semibold uppercase text-muted-foreground">

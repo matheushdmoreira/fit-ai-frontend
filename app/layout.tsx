@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Anton, Geist, Geist_Mono, Inter_Tight } from 'next/font/google'
+import { Suspense } from 'react'
 import './globals.css'
 import { NuqsAdapter } from 'nuqs/adapters/next'
 import { ChatPanel } from './_components/chat-panel'
@@ -42,7 +43,9 @@ export default function RootLayout({
       >
         <NuqsAdapter>
           {children}
-          <ChatPanel />
+          <Suspense fallback={null}>
+            <ChatPanel />
+          </Suspense>
         </NuqsAdapter>
       </body>
     </html>
