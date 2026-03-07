@@ -1,24 +1,19 @@
 'use client'
 
+import { headers } from 'next/headers'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { redirect } from 'next/navigation'
 import { authClient } from '@/app/_lib/auth-client'
 import { Button } from '@/components/ui/button'
 
-export default function AuthPage() {
-  const router = useRouter()
-  const { data: session, isPending } = authClient.useSession()
+export default async function AuthPage() {
+  const session = await authClient.getSession({
+    fetchOptions: {
+      headers: await headers(),
+    },
+  })
 
-  useEffect(() => {
-    if (!isPending && session) {
-      router.replace('/')
-    }
-  }, [isPending, session, router])
-
-  if (isPending || session) {
-    return null
-  }
+  if (session.data?.user) redirect('/')
 
   function handleGoogleLogin() {
     authClient.signIn.social({
