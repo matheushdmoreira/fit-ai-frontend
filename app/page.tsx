@@ -19,7 +19,7 @@ export default async function Home() {
     },
   })
 
-  if (!session.data) {
+  if (!session.data?.user) {
     redirect('/auth')
   }
 
