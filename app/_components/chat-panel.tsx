@@ -51,7 +51,7 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
   const [chatParams, setChatParams] = useQueryStates(chatSearchParams)
   const { chat_open: isOpen, chat_initial_message: initialMessage } = chatParams
 
-  const { messages, sendMessage, status } = useChat({
+  const { messages, sendMessage, status, error } = useChat({
     transport: new DefaultChatTransport({ api: '/ai' }),
   })
 
@@ -75,10 +75,10 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
     }
   }, [isOpen, initialMessage, sendMessage, setChatParams])
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll on new messages
+  // biome-ignore lint/correctness/useExhaustiveDependencies: scroll on new messages and streaming content
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
-  }, [messages.length])
+  }, [messages])
 
   function handleClose() {
     setChatParams({ chat_open: false, chat_initial_message: null })
@@ -170,7 +170,7 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
             )
           })}
 
-          {isStreaming && messages.length === 0 && (
+          {status === 'submitted' && (
             <div className="flex justify-start pr-[60px]">
               <div className="rounded-xl bg-secondary p-3">
                 <div className="flex items-center gap-1">
@@ -178,6 +178,17 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
                   <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
                   <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
                 </div>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="flex justify-start pr-[60px]">
+              <div className="rounded-xl bg-secondary p-3">
+                <p className="font-heading text-sm leading-[1.4]">
+                  Não foi possível gerar uma resposta no momento. Tente
+                  novamente em instantes.
+                </p>
               </div>
             </div>
           )}
@@ -303,7 +314,7 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
             )
           })}
 
-          {isStreaming && messages.length === 0 && (
+          {status === 'submitted' && (
             <div className="flex justify-start pr-[60px]">
               <div className="rounded-xl bg-secondary p-3">
                 <div className="flex items-center gap-1">
@@ -311,6 +322,17 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
                   <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:150ms]" />
                   <span className="size-1.5 animate-bounce rounded-full bg-muted-foreground [animation-delay:300ms]" />
                 </div>
+              </div>
+            </div>
+          )}
+
+          {error && (
+            <div className="flex justify-start pr-[60px]">
+              <div className="rounded-xl bg-secondary p-3">
+                <p className="font-heading text-sm leading-[1.4] text-foreground">
+                  Não foi possível gerar uma resposta no momento. Tente
+                  novamente em instantes.
+                </p>
               </div>
             </div>
           )}
