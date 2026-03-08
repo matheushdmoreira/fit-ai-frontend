@@ -6,14 +6,9 @@ import { Button } from '@/components/ui/button'
 
 export const SignInWithGoogle = () => {
   const handleGoogleLogin = async () => {
-    const callbackURL =
-      typeof window !== 'undefined'
-        ? `${window.location.origin}/`
-        : `${process.env.NEXT_PUBLIC_BASE_URL}/`
-
     const { error } = await authClient.signIn.social({
       provider: 'google',
-      callbackURL,
+      callbackURL: `${process.env.NEXT_PUBLIC_BASE_URL}/`,
     })
 
     if (error) {
