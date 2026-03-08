@@ -97,6 +97,19 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
 
   const isStreaming = status === 'submitted' || status === 'streaming'
 
+  const lastMessage = messages[messages.length - 1]
+  const lastAssistantText =
+    lastMessage?.role === 'assistant'
+      ? lastMessage.parts
+          .filter((p) => p.type === 'text')
+          .map((p) => p.text)
+          .join('')
+      : null
+
+  const isLoadingResponse =
+    status === 'submitted' ||
+    (status === 'streaming' && lastAssistantText === '')
+
   if (embedded) {
     return (
       <div className="flex w-full flex-1 flex-col overflow-hidden bg-background">
@@ -154,6 +167,8 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
               )
             }
 
+            if (!text) return null
+
             const isLastAssistant =
               index === messages.length - 1 && message.role === 'assistant'
 
@@ -170,7 +185,7 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
             )
           })}
 
-          {status === 'submitted' && (
+          {isLoadingResponse && (
             <div className="flex justify-start pr-[60px]">
               <div className="rounded-xl bg-secondary p-3">
                 <div className="flex items-center gap-1">
@@ -298,6 +313,8 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
               )
             }
 
+            if (!text) return null
+
             const isLastAssistant =
               index === messages.length - 1 && message.role === 'assistant'
 
@@ -314,7 +331,7 @@ export function ChatPanel({ embedded = false }: ChatPanelProps) {
             )
           })}
 
-          {status === 'submitted' && (
+          {isLoadingResponse && (
             <div className="flex justify-start pr-[60px]">
               <div className="rounded-xl bg-secondary p-3">
                 <div className="flex items-center gap-1">
