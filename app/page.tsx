@@ -8,9 +8,9 @@ import { TodayWorkoutSection } from '@/app/_components/today-workout-section'
 import {
   type GetHomeData200,
   getHomeData,
+  getUserTrainData,
 } from '@/app/_lib/api/fetch-generated'
 import { authClient } from '@/app/_lib/auth-client'
-import { needsOnboarding } from '@/app/_lib/check-onboarding'
 
 export default async function Home() {
   const session = await authClient.getSession({
@@ -23,19 +23,23 @@ export default async function Home() {
     redirect('/auth')
   }
 
-  const response = await getHomeData(dayjs().format('YYYY-MM-DD'))
+  const today = dayjs()
+  const [homeData, trainData] = await Promise.all([
+    getHomeData(today.format('YYYY-MM-DD')),
+    getUserTrainData(),
+  ])
 
-  if (response.status !== 200) {
-    redirect('/auth')
+  if (homeData.status !== 200) {
+    throw new Error('Failed to fetch home data')
   }
 
-  if (await needsOnboarding()) {
-    redirect('/onboarding')
-  }
+  const needsOnboarding =
+    !homeData.data.activeWorkoutPlanId ||
+    (trainData.status === 200 && !trainData.data)
+  if (needsOnboarding) redirect('/onboarding')
 
   const { todayWorkoutDay, workoutStreak, consistencyByDay } =
-    response.data as GetHomeData200
-
+    homeData.data as GetHomeData200
   const firstName = session.data.user.name?.split(' ')[0] ?? ''
 
   return (
